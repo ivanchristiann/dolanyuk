@@ -27,8 +27,79 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String _user_id = '';
+  String _user_email = '';
+  String _user_nama = "";
   String _user_password = "";
+  String _user_repeat_password = "";
+
+  List<String> emails = [];
+
+  Future<String> fetchData() async {
+    final response = await http.get(Uri.parse(
+        "https://ubaya.me/flutter/160420056/dolanyuk/checkemail.php"));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = jsonDecode(response.body);
+      if (jsonData['result'] == 'success') {
+        List<Map<String, dynamic>> dataList =
+            List<Map<String, dynamic>>.from(jsonData['data']);
+        for (var data in dataList) {
+          emails.add(data['email']);
+        }
+        setState(() {});
+        return response.body;
+      } else {
+        throw Exception('Failed to fetch data: ${jsonData['result']}');
+      }
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
+
+  void submit() async {
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/flutter/160420056/dolanyuk/register.php"),
+        body: {
+          'name': _user_nama,
+          'email': _user_email,
+          'password': _user_password,
+        });
+    if (response.statusCode == 200) {
+      Map json = jsonDecode(response.body);
+      if (json['result'] == 'success') {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Text('Success Registered New Account'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyLogin()),
+                    );
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error')));
+      throw Exception('Failed to read API');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +132,9 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(10),
                 child: TextField(
                   onChanged: (v) {
-                    setState(() {});
+                    setState(() {
+                      _user_email = v;
+                    });
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -75,7 +148,9 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(10),
                 child: TextField(
                   onChanged: (v) {
-                    setState(() {});
+                    setState(() {
+                      _user_nama = v;
+                    });
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -89,7 +164,9 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(10),
                 child: TextField(
                   onChanged: (v) {
-                    setState(() {});
+                    setState(() {
+                      _user_password = v;
+                    });
                   },
                   obscureText: true,
                   decoration: const InputDecoration(
@@ -104,12 +181,14 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(10),
                 child: TextField(
                   onChanged: (v) {
-                    setState(() {});
+                    setState(() {
+                      _user_repeat_password = v;
+                    });
                   },
                   obscureText: true,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Ulangi Password',
+                    labelText: 'Repeat Password',
                   ),
                 ),
               ),
@@ -130,7 +209,9 @@ class _RegisterState extends State<Register> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle sign up button press
+                    if (_validateFields() && !_isEmailExist()) {
+                      submit();
+                    }
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text('Sign Up'),
@@ -141,5 +222,42 @@ class _RegisterState extends State<Register> {
         ),
       ),
     );
+  }
+
+  bool _validateFields() {
+    if (_user_email.isEmpty ||
+        _user_nama.isEmpty ||
+        _user_password.isEmpty ||
+        _user_repeat_password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill all field.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    } else if (_user_password != _user_repeat_password) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password and Repeat Password must be same.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  bool _isEmailExist() {
+    if (emails.contains(_user_email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Email has been registered. Please use another email.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return true;
+    }
+    return false;
   }
 }
