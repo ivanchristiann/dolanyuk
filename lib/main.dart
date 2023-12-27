@@ -5,22 +5,24 @@ import 'package:dolanyuk/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String active_user = "";
-int topScore = 0;
+int active_user_id = 0;
+String active_user_name = "";
 
-Future<String> checkUser() async {
+Future<Map<String, dynamic>> checkUser() async {
   final prefs = await SharedPreferences.getInstance();
-  String user_id = prefs.getString("user_id") ?? '';
-  return user_id;
+  int user_id = prefs.getInt("id") ?? 0;
+  String user_name = prefs.getString('name') ?? '';
+  return {'id': user_id, 'name': user_name};
 }
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  checkUser().then((String result) {
-    if (result == '')
+  checkUser().then((result) {
+    if (result['id'] == 0)
       runApp(MyLogin());
     else {
-      active_user = result;
+      active_user_id = result['id'];
+      active_user_name = result['name'];
       runApp(MyApp());
     }
   });
@@ -54,30 +56,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _emoji = "";
   int _currentIndex = 0;
   final List<Widget> _screensBottNav = [Jadwal(), Cari(), Profil()];
   final List<String> _title = ['Jadwal', 'Cari', 'Profil'];
 
-  String _user_id = "";
-  int top_poin = 0;
+  int _user_id = 0;
+  String _user_name = '';
 
   @override
   void initState() {
     super.initState();
     checkUser().then((value) => setState(
           () {
-            _user_id = value;
+            _user_id = value['id'] ?? 0;
+            _user_name = value['name'] ?? '';
           },
         ));
   }
 
-  // void doLogout() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   prefs.remove("user_id");
-  //   main();
-  // }
+  void doLogout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    main();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
-              accountName: Text("xyz"),
-              accountEmail: Text(_user_id),
+              accountName: Text(_user_name),
+              accountEmail: Text(_user_id.toString()),
               currentAccountPicture: CircleAvatar(
                   backgroundImage: NetworkImage("https://i.pravatar.cc/150"))),
           ListTile(
@@ -160,13 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Profil()));
               }),
-
-          // ListTile(
-          //     title: Text("Logout", style: TextStyle(color: Colors.red)),
-          //     leading: Icon(Icons.logout),
-          //     onTap: () {
-          //       doLogout();
-          //     }),
+          ListTile(
+              title: Text("Logout", style: TextStyle(color: Colors.red)),
+              leading: Icon(Icons.logout),
+              onTap: () {
+                doLogout();
+              }),
         ],
       ),
     );

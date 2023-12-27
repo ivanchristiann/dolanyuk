@@ -27,30 +27,45 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String _user_id = '';
-  String _user_password = "";
-  String error_login = "";
+  String _email = '';
+  String _password = "";
 
-  // void doLogin() async {
-  //   final response = await http.post(
-  //       Uri.parse("https://ubaya.me/flutter/160420056/login.php"),
-  //       body: {'user_id': _user_id, 'user_password': _user_password});
-  //   if (response.statusCode == 200) {
-  //     Map json = jsonDecode(response.body);
-  //     if (json['result'] == 'success') {
-  //       final prefs = await SharedPreferences.getInstance();
-  //       prefs.setString("user_id", _user_id);
-  //       prefs.setString("user_name", json['user_name']);
-  //       main();
-  //     } else {
-  //       setState(() {
-  //         error_login = "Incorrect user or password";
-  //       });
-  //     }
-  //   } else {
-  //     throw Exception('Failed to read API');
-  //   }
-  // }
+  void doLogin() async {
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/flutter/160420056/dolanyuk/login.php"),
+        body: {'email': _email, 'password': _password});
+    if (response.statusCode == 200) {
+      Map json = jsonDecode(response.body);
+      if (json['result'] == 'success') {
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setInt("id", json['id']);
+        prefs.setString("name", json['name']);
+        main();
+      } else {
+        setState(() {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text('Account not found, please register'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        });
+      }
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +83,9 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  setState(() {});
+                  setState(() {
+                    _email = v;
+                  });
                 },
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -80,7 +97,9 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  setState(() {});
+                  setState(() {
+                    _password = v;
+                  });
                 },
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -104,7 +123,29 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_email == '' || _password == '') {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Email and password cannot be empty'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Close'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      doLogin();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text('Login'),
                 ),
