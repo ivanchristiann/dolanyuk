@@ -1,6 +1,7 @@
 import 'package:dolanyuk/screen/Cari.dart';
 import 'package:dolanyuk/screen/Jadwal.dart';
 import 'package:dolanyuk/screen/Profil.dart';
+import 'package:dolanyuk/screen/addjadwal.dart';
 import 'package:dolanyuk/screen/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,16 +95,16 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(_title[_currentIndex])),
       body: _screensBottNav[_currentIndex],
       drawer: myDrawer(context),
-      persistentFooterButtons: <Widget>[
-        ElevatedButton(
-          onPressed: () {},
-          child: Icon(Icons.skip_previous),
-        ),
-        ElevatedButton(
-          onPressed: () {},
-          child: Icon(Icons.skip_next),
-        ),
-      ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewJadwal()),
+          );
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.create),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (int index) {
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             label: "Profil",
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.person),
           ),
         ],
       ),
