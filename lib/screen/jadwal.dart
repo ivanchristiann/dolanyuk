@@ -1,14 +1,166 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Jadwal extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:dolanyuk/class/jadwal.dart';
+
+class ListJadwal extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _JadwalState();
   }
 }
 
-class _JadwalState extends State<Jadwal> {
+class _JadwalState extends State<ListJadwal> {
+  List<Jadwal> jadwal = [];
+  int _user_id = 0;
+
+  Future<String> fetchData() async {
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/flutter/160420056/dolanyuk/getjadwal.php"),
+        body: {'user_id': _user_id.toString()});
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
+
+  bacaData() {
+    Future<String> data = fetchData();
+    data.then((value) {
+      Map json = jsonDecode(value);
+      for (var jadwals in json['data']) {
+        Jadwal jad = Jadwal.fromJson(jadwals);
+        jadwal.add(jad);
+      }
+      setState(() {});
+    });
+  }
+
+  Future<int> checkUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    int user_id = prefs.getInt("id") ?? 0;
+    return user_id;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkUser().then((result) {
+      _user_id = result;
+      bacaData();
+    });
+  }
+
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            jadwal.isEmpty
+                ? _emptyJadwal()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: jadwal.length,
+                    itemBuilder: (context, index) {
+                      return _recipeCard(context, jadwal[index]);
+                    },
+                  ),
+            const Divider(
+              height: 100,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyJadwal() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Jadwal main masih kosong nih',
+            style: TextStyle(fontSize: 18),
+          ),
+          SizedBox(height: 8),
+          Text(
+            'Cari konco main atau bikin jadwal baru aja',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _recipeCard(BuildContext context, Jadwal jadwal) {
+    return Container(
+        margin: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: -6,
+              blurRadius: 8,
+              offset: Offset(8, 7),
+            ),
+          ],
+        ),
+        child: Card(
+          elevation: 4, // Atur elevasi sesuai kebutuhan
+          margin: EdgeInsets.all(10), // Atur margin sesuai kebutuhan
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(jadwal.image_url),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                jadwal.nama_dolanan,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Tanggal: ${jadwal.tanggal}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Waktu: ${jadwal.waktu}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Minimal Member: ${jadwal.minimal_member}'),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Lokasi: ${jadwal.lokasi}',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Alamat: ${jadwal.alamat}',
+                style: TextStyle(fontSize: 16),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Party Chat'),
+              ),
+            ],
+          ),
+        ));
   }
 }

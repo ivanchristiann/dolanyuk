@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       routes: {
-        'jadwal': (context) => Jadwal(),
+        'jadwal': (context) => ListJadwal(),
       },
     );
   }
@@ -58,7 +58,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
-  final List<Widget> _screensBottNav = [Jadwal(), Cari(), Profil()];
+  final List<Widget> _screensBottNav = [ListJadwal(), Cari(), Profil()];
   final List<String> _title = ['Jadwal', 'Cari', 'Profil'];
 
   int _user_id = 0;
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      Jadwal(),
+      ListJadwal(),
       Cari(),
       Profil(),
     ];
@@ -145,8 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: new Text("My Basket"),
               leading: new Icon(Icons.shopping_basket),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Jadwal()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListJadwal()));
               }),
           ListTile(
               title: Text("Add Recipe"),
