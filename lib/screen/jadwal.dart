@@ -66,7 +66,7 @@ class _JadwalState extends State<ListJadwal> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: jadwal.length,
                     itemBuilder: (context, index) {
-                      return _recipeCard(context, jadwal[index]);
+                      return _jadwalCard(context, jadwal[index]);
                     },
                   ),
             const Divider(
@@ -97,70 +97,95 @@ class _JadwalState extends State<ListJadwal> {
     );
   }
 
-  Widget _recipeCard(BuildContext context, Jadwal jadwal) {
+  Widget _jadwalCard(BuildContext context, Jadwal jadwal) {
     return Container(
-        margin: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: -6,
-              blurRadius: 8,
-              offset: Offset(8, 7),
-            ),
-          ],
-        ),
-        child: Card(
-          elevation: 4, // Atur elevasi sesuai kebutuhan
-          margin: EdgeInsets.all(10), // Atur margin sesuai kebutuhan
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(jadwal.image_url),
-                    fit: BoxFit.cover,
-                  ),
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: -6,
+            blurRadius: 8,
+            offset: Offset(8, 7),
+          ),
+        ],
+      ),
+      child: Card(
+        elevation: 4,
+        margin: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 100,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(jadwal.image_url),
+                  fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
+            ),
+            SizedBox(height: 8),
+            Center(
+              child: Text(
                 jadwal.nama_dolanan,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 4),
-              Text(
+            ),
+            SizedBox(height: 4),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
                 'Tanggal: ${jadwal.tanggal}',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 4),
-              Text(
+            ),
+            SizedBox(height: 4),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
                 'Waktu: ${jadwal.waktu}',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 8),
-              ElevatedButton(
+            ),
+            SizedBox(height: 8),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: ElevatedButton(
                 onPressed: () {},
                 child: Text('Minimal Member: ${jadwal.minimal_member}'),
               ),
-              SizedBox(height: 8),
-              Text(
+            ),
+            SizedBox(height: 8),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
                 'Lokasi: ${jadwal.lokasi}',
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 4),
-              Text(
+            ),
+            SizedBox(height: 4),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
                 'Alamat: ${jadwal.alamat}',
                 style: TextStyle(fontSize: 16),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Party Chat'),
-              ),
-            ],
-          ),
-        ));
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Party Chat'),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
   }
 }
