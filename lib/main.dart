@@ -8,12 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 int active_user_id = 0;
 String active_user_name = "";
+String active_photo_url = "";
 
 Future<Map<String, dynamic>> checkUser() async {
   final prefs = await SharedPreferences.getInstance();
   int user_id = prefs.getInt("id") ?? 0;
   String user_name = prefs.getString('name') ?? '';
-  return {'id': user_id, 'name': user_name};
+  String photo_url = prefs.getString('photo_url') ?? '';
+  return {'id': user_id, 'name': user_name, 'photo_url': photo_url};
 }
 
 void main() {
@@ -24,6 +26,7 @@ void main() {
     else {
       active_user_id = result['id'];
       active_user_name = result['name'];
+      active_photo_url = result['photo_url'];
       runApp(MyApp());
     }
   });
@@ -63,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _user_id = 0;
   String _user_name = '';
+  String _user_photo_url = '';
 
   @override
   void initState() {
@@ -71,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
           () {
             _user_id = value['id'] ?? 0;
             _user_name = value['name'] ?? '';
+            _user_photo_url = value['photo_url'] ?? '';
           },
         ));
   }
@@ -139,8 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
           UserAccountsDrawerHeader(
               accountName: Text(_user_name),
               accountEmail: Text(_user_id.toString()),
-              currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage("https://i.pravatar.cc/150"))),
+              currentAccountPicture:
+                  CircleAvatar(backgroundImage: NetworkImage(_user_photo_url))),
           ListTile(
               title: new Text("My Basket"),
               leading: new Icon(Icons.shopping_basket),

@@ -151,9 +151,16 @@ class _JadwalState extends State<ListJadwal> {
             SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.only(left: 8),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Minimal Member: ${jadwal.minimal_member}'),
+              child: Row(
+                children: [
+                  Icon(Icons.group, color: Colors.teal),
+                  SizedBox(width: 4),
+                  ElevatedButton(
+                    onPressed: null,
+                    child:
+                        Text('${jadwal.terisi}/${jadwal.minimal_member} orang'),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 8),

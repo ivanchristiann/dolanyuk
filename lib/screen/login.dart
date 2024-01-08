@@ -40,6 +40,8 @@ class _LoginState extends State<Login> {
         final prefs = await SharedPreferences.getInstance();
         prefs.setInt("id", json['id']);
         prefs.setString("name", json['name']);
+        prefs.setString("email", json['email']);
+        prefs.setString("photo_url", json['photo_url']);
         main();
       } else {
         setState(() {

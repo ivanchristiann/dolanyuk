@@ -8,6 +8,7 @@ class Jadwal {
   String nama_dolanan;
   int minimal_member;
   String image_url;
+  int terisi;
 
   Jadwal(
       {required this.id,
@@ -18,7 +19,8 @@ class Jadwal {
       required this.alamat,
       required this.nama_dolanan,
       required this.minimal_member,
-      required this.image_url});
+      required this.image_url,
+      required this.terisi});
 
   factory Jadwal.fromJson(Map<String, dynamic> json) {
     return Jadwal(
@@ -30,6 +32,7 @@ class Jadwal {
         alamat: json['alamat'] as String,
         nama_dolanan: json['nama_dolanan'] as String,
         minimal_member: json['minimal_member'] as int,
-        image_url: json['image_url'] as String);
+        image_url: json['image_url'] as String,
+        terisi: json['terisi'] as int);
   }
 }
