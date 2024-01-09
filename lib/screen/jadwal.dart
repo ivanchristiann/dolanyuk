@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dolanyuk/screen/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +11,7 @@ class ListJadwal extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _JadwalState();
   }
-}  
+}
 
 class _JadwalState extends State<ListJadwal> {
   List<Jadwal> jadwal = [];
@@ -184,7 +185,12 @@ class _JadwalState extends State<ListJadwal> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ListChat()),
+                    );
+                  },
                   child: Text('Party Chat'),
                 ),
               ],
