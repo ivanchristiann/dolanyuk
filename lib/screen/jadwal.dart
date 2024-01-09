@@ -10,7 +10,7 @@ class ListJadwal extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _JadwalState();
   }
-}
+}  
 
 class _JadwalState extends State<ListJadwal> {
   List<Jadwal> jadwal = [];
