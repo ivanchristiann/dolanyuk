@@ -45,18 +45,6 @@ class _UbahPasswordState extends State<UbahPassword> {
     }
   }
 
-  // bacaData() {
-  //   Future<String> data = fetchData();
-  //   data.then((value) {
-  //     Map json = jsonDecode(value);
-  //     for (var dols in json['data']) {
-  //       Dolanan dol = Dolanan.fromJson(dols);
-  //       dolanan.add(dol);
-  //     }
-  //     setState(() {});
-  //   });
-  // }
-
   Future<int> checkUser() async {
     final prefs = await SharedPreferences.getInstance();
     int user_id = prefs.getInt("id") ?? 0;
@@ -117,8 +105,7 @@ class _UbahPasswordState extends State<UbahPassword> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Align(
               alignment: Alignment.centerLeft,
@@ -171,6 +158,7 @@ class _UbahPasswordState extends State<UbahPassword> {
                       labelText: 'Konfirmasi Password Baru',
                     ),
                   ),
+                  SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
                       if (_controllerNewPassword == '' ||

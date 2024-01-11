@@ -100,16 +100,17 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(_title[_currentIndex])),
       body: _screensBottNav[_currentIndex],
       drawer: myDrawer(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddNewJadwal()),
-          );
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.create),
-      ),
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddNewJadwal()),
+                );
+              },
+              child: const Icon(Icons.create),
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (int index) {
@@ -147,22 +148,22 @@ class _MyHomePageState extends State<MyHomePage> {
               currentAccountPicture:
                   CircleAvatar(backgroundImage: NetworkImage(_user_photo_url))),
           ListTile(
-              title: new Text("My Basket"),
-              leading: new Icon(Icons.shopping_basket),
+              title: new Text("Home"),
+              leading: new Icon(Icons.home),
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ListJadwal()));
               }),
           ListTile(
-              title: Text("Add Recipe"),
-              leading: Icon(Icons.receipt),
+              title: Text("Cari"),
+              leading: Icon(Icons.search),
               onTap: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Cari()));
               }),
           ListTile(
-              title: Text("Quiz"),
-              leading: Icon(Icons.question_answer),
+              title: Text("Profil"),
+              leading: Icon(Icons.person),
               onTap: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => Profil()));

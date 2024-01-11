@@ -136,6 +136,16 @@ class _ProfilState extends State<Profil> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UbahPassword()),
+                      );
+                    },
+                    child: Text('Ubah Password'),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
                       if (_user_name != '' && _user_photo_url != '') {
                         submit();
                       } else {
@@ -149,15 +159,6 @@ class _ProfilState extends State<Profil> {
                       }
                     },
                     child: Text('Simpan'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UbahPassword()),
-                      );
-                    },
-                    child: Text('Ubah Password'),
                   ),
                 ],
               ),

@@ -93,18 +93,27 @@ class _ChatState extends State<ListChat> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      appBar: AppBar(
+        title: Text("Party Chat"),
+      ),
+      body: Column(
         children: [
-          chat.isEmpty
-              ? _emptyChat()
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: chat.length,
-                  itemBuilder: (context, index) {
-                    return _chatCard(context, chat[index]);
-                  },
-                ),
+          Expanded(
+            child: ListView(
+              children: [
+                chat.isEmpty
+                    ? _emptyChat()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: chat.length,
+                        itemBuilder: (context, index) {
+                          return _chatCard(context, chat[index]);
+                        },
+                      ),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -125,10 +134,11 @@ class _ChatState extends State<ListChat> {
                 ),
                 SizedBox(width: 10),
                 ElevatedButton(
-                    onPressed: () {
-                      newChat();
-                    },
-                    child: Text('Kirim')),
+                  onPressed: () {
+                    newChat();
+                  },
+                  child: Text('Kirim'),
+                ),
               ],
             ),
           ),
