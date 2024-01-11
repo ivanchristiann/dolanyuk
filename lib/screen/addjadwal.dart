@@ -7,19 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class AddNewJadwal extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dolan Yuk',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: AddJadwal(),
-    );
-  }
-}
-
 class AddJadwal extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -86,6 +73,7 @@ class _AddJadwalState extends State<AddJadwal> {
           content: Text('Sukses Menambah Data'),
           backgroundColor: Colors.green,
         ));
+        Navigator.pop(context);
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -114,8 +102,7 @@ class _AddJadwalState extends State<AddJadwal> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Align(
               alignment: Alignment.centerLeft,

@@ -101,7 +101,6 @@ class _CariState extends State<Cari> {
         Jadwal jad = Jadwal.fromJson(jadwals);
         newJadwalList.add(jad);
       }
-
       setState(() {
         _allJadwal = newJadwalList;
         jadwal = _txtCari.isEmpty
@@ -203,32 +202,10 @@ class _CariState extends State<Cari> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: Icon(Icons.search),
-              labelText: 'Nama Dolanan mengandung kata:',
-            ),
-            onFieldSubmitted: (value) {
-              setState(() {
-                _txtCari = value;
-                jadwal.clear();
-                members.clear();
-                bacaData();
-              });
-            },
-          ),
-          SizedBox(height: 8),
           jadwal.isEmpty
               ? Text(
-                  'Jadwal main masih kosong nih',
+                  'Tidak ada jadwal yang tersedia',
                   style: TextStyle(fontSize: 18),
-                )
-              : Container(),
-          SizedBox(height: 8),
-          jadwal.isEmpty
-              ? Text(
-                  'Cari konco main atau bikin jadwal baru aja',
-                  style: TextStyle(fontSize: 16),
                 )
               : Container(),
         ],

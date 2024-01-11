@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddNewJadwal()),
+                  MaterialPageRoute(builder: (context) => AddJadwal()),
                 );
               },
               child: const Icon(Icons.create),
@@ -144,11 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           UserAccountsDrawerHeader(
               accountName: Text(_user_name),
-              accountEmail: Text(_user_id.toString()),
+              accountEmail: Text(''),
               currentAccountPicture:
                   CircleAvatar(backgroundImage: NetworkImage(_user_photo_url))),
           ListTile(
-              title: new Text("Home"),
+              title: new Text("Jadwal"),
               leading: new Icon(Icons.home),
               onTap: () {
                 Navigator.push(context,

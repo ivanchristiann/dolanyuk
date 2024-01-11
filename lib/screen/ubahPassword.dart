@@ -7,19 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class AddNewJadwal extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dolan Yuk',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: UbahPassword(),
-    );
-  }
-}
-
 class UbahPassword extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
