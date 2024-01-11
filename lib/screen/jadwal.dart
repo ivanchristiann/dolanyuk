@@ -28,6 +28,11 @@ class _JadwalState extends State<ListJadwal> {
     }
   }
 
+  void reloadJadwal() {
+    jadwal.clear();
+    bacaData();
+  }
+
   bacaData() {
     Future<String> data = fetchData();
     data.then((value) {
@@ -53,6 +58,43 @@ class _JadwalState extends State<ListJadwal> {
       _user_id = result;
       bacaData();
     });
+  }
+
+  void cancelJadwal(int $idJadwal) async {
+    final response = await http.post(
+        Uri.parse(
+            "https://ubaya.me/flutter/160420056/dolanyuk/cancelJadwal.php"),
+        body: {
+          'idUser': _user_id.toString(),
+          'idJadwal': $idJadwal.toString(),
+        });
+    if (response.statusCode == 200) {
+      Map json = jsonDecode(response.body);
+      if (json['result'] == 'success') {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Success Cancel !!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    reloadJadwal();
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error')));
+      throw Exception('Failed to read API');
+    }
   }
 
   Widget build(BuildContext context) {
@@ -95,6 +137,41 @@ class _JadwalState extends State<ListJadwal> {
           ),
         ],
       ),
+    );
+  }
+
+  void _confirmationCancel(int $idJadwal) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus'),
+          content: Text('Apakah Anda yakin ingin membatalkan?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                cancelJadwal($idJadwal);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
+              child: Text(
+                'Ya, Hapus',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -188,10 +265,27 @@ class _JadwalState extends State<ListJadwal> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ListChat()),
+                      MaterialPageRoute(
+                          builder: (context) => ListChat(
+                                jadwalId: jadwal.id,
+                              )),
                     );
                   },
                   child: Text('Party Chat'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _confirmationCancel(jadwal.id);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),

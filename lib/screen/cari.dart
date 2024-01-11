@@ -25,6 +25,12 @@ class _CariState extends State<Cari> {
   int _user_id = 0;
   String _txtCari = '';
 
+  void reloadCari() {
+    jadwal.clear();
+    _allJadwal.clear();
+    bacaData();
+  }
+
   Future<String> fetchData() async {
     final response = await http.post(
         Uri.parse("https://ubaya.me/flutter/160420056/dolanyuk/getCari.php"),
@@ -57,10 +63,8 @@ class _CariState extends State<Cari> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Cari()),
-                    );
+                    Navigator.pop(context);
+                    reloadCari();
                   },
                   child: Text('Close'),
                 ),

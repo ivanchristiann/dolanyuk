@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dolanyuk/main.dart';
+import 'package:dolanyuk/screen/ubahPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -148,6 +149,15 @@ class _ProfilState extends State<Profil> {
                       }
                     },
                     child: Text('Simpan'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UbahPassword()),
+                      );
+                    },
+                    child: Text('Ubah Password'),
                   ),
                 ],
               ),
